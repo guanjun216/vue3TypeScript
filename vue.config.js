@@ -1,22 +1,18 @@
-/* jshint esversion: 6 */
 const path = require("path");
 const sourceMap = process.env.NODE_ENV === "development";
 
 module.exports = {
-  publicPath: "/",
+  // 基本路径
+  publicPath: "./",
+  // 输出文件目录
   outputDir: "dist",
-  assetsDir: "static",
-  lintOnSave: process.env.NODE_ENV === "development",
-  devServer: {
-    port: 80,
-    host: process.env.VUE_APP_MY_URL,
-    open: false,
-    overlay: {
-      warnings: false,
-      errors: true,
-    },
+  // eslint-loader 是否在保存的时候检查
+  lintOnSave: false,
+  // webpack配置
+  // 参考 https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
+  chainWebpack: (config) => {
+    config.rule("ts").use("babel-loader");
   },
-  chainWebpack: () => {},
   configureWebpack: (config) => {
     if (process.env.NODE_ENV === "production") {
       // 为生产环境修改配置
@@ -31,7 +27,7 @@ module.exports = {
       resolve: {
         extensions: [".js", ".vue", ".json", ".ts", ".tsx"],
         alias: {
-          vue$: "vue/dist/vue.js",
+          //   vue$: "vue/dist/vue.js",
           "@": path.resolve(__dirname, "./src"),
           "@c": path.resolve(__dirname, "./src/components"),
         },
@@ -58,9 +54,29 @@ module.exports = {
   // see https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa
   pwa: {},
   // webpack-dev-server 相关配置
-  before: (app) => {},
-
+  devServer: {
+    open: true, // 启动后自动打开浏览器
+    host: "localhost",
+    port: 9002,
+    https: false,
+    hot: true,
+    // hotOnly: false,
+    // proxy: {
+    //   // 设置代理
+    //   // proxy all requests starting with /api to jsonplaceholder
+    //   "/api": {
+    //     target: "http://localhost:3000/",
+    //     changeOrigin: true,
+    //     ws: true,
+    //     pathRewrite: {
+    //       "^/api": "",
+    //     },
+    //   },
+    // },
+    // before: (app) => {},
+  },
   // 第三方插件配置
-  // pluginOptions: {
-  // }
+  //   pluginOptions: {
+  // ...
+  //   },
 };

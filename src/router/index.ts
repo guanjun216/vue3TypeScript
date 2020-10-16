@@ -1,17 +1,18 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
+import Login from "@/views/loginView/index";
 
 const routes: Array<RouteRecordRaw> = [
-  // {
-  //   path: "/",
-  //   name: "Home",
-  //   component: Home
-  // },
+  {
+    path: "/",
+    name: "Login",
+    component: Login,
+  },
   // {
   //   path: "/about",
   //   name: "About",
   //   component: () =>
-  //     import(/* webpackChunkName: "about" */ "../views/About.vue")
-  // }
+  //     import(/* webpackChunkName: "about" */ "../views/About.vue"),
+  // },
 ];
 
 const router = createRouter({
