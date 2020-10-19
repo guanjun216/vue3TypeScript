@@ -4,14 +4,20 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
+    "build-dev2": "vue-cli-service build --mode build-dev2",
+    "build-dev2-site": "vue-cli-service build --mode build-dev2-site",
+    "serve-dev2": "vue-cli-service serve --mode serve-dev2",
+    "serve-dev2-site": "vue-cli-service serve --mode serve-dev2-site",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
     "ant-design-vue": "^2.0.0-beta.10",
+    "axios": "^0.20.0",
     "compression-webpack-plugin": "^6.0.3",
     "core-js": "^3.6.5",
     "vue": "^3.0.0",
+    "vue-axios": "^3.0.1",
     "vue-class-component": "^8.0.0-0",
     "vue-property-decorator": "^9.0.2",
     "vue-router": "^4.0.0-0",

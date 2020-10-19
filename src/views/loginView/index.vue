@@ -22,7 +22,7 @@
                 <a-input
                   class="login-username"
                   :class="login.username.length >= 6 ? 'active' : ''"
-                  v-model="login.username"
+                  v-model:value="login.username"
                   placeholder="请输入登录账户"
                   :maxlength="16"
                 ></a-input>
@@ -32,30 +32,31 @@
                   class="login-password"
                   :class="login.password.length >= 6 ? 'active' : ''"
                   type="password"
-                  v-model="login.password"
+                  v-model:value="login.password"
                   placeholder="请输入登录密码"
                   :maxlength="16"
                 ></a-input>
               </a-form-item>
               <a-form-item class="login-form-item" name="validateCode">
                 <a-input
-                  class="login-validate-code"
-                  :class="login.validateCode.length > 0 ? 'active' : ''"
-                  v-model="login.validateCode"
+                  :class="`login-validate-code ${
+                    login.validateCode.length > 0 ? 'active' : ''
+                  }`"
+                  v-model:value="login.validateCode"
                   placeholder="请输入验证码"
-                  @keyup.enter="updateUser('ruleForm')"
+                  @keyup.enter="updateUser"
                 ></a-input>
                 <img
                   class="set-captimg"
                   :src="captchaImage"
                   :alt="'图形验证码'"
-                  @click="captchaImageChange()"
+                  @click="captchaImageChange"
                 />
               </a-form-item>
               <a-form-item class="login-form-item margin-bottom-19">
                 <a-button
                   type="primary"
-                  @click="updateUser('ruleForm')"
+                  @click="updateUser"
                   class="login-btn"
                   :disabled="
                     !login.username ||
@@ -84,27 +85,38 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref, reactive } from "vue";
+import {
+  defineComponent,
+  ref,
+  reactive,
+  getCurrentInstance,
+  onMounted,
+} from "vue";
+import { useForm } from "@ant-design-vue/use";
+import { UserInfo } from "@/model/interface/login/login";
 import {
   validateUsername,
   validatePassword,
   validateNewPassword,
 } from "@/utils/validate.ts";
+
 export default defineComponent({
   name: "Login",
+  components: {},
   setup() {
-    const key = ""; //随机值
-    const login = {
+    const internalInstance = getCurrentInstance();
+    let key: String = ""; //随机值
+    const login = reactive({
       username: "",
       password: "",
       validateCode: "",
       setLDiv: "",
       screenWidth: "",
       screenHeight: "",
-    };
-    const captchaImage = "";
-    const version = "1.0.0";
-    const rules = {
+    }) as UserInfo;
+    const captchaImage = ref("");
+    const version = ref("1.0.0");
+    const rules = reactive({
       username: [
         {
           required: true,
@@ -130,11 +142,28 @@ export default defineComponent({
         { required: true, message: "请输入密码", trigger: "blur" },
         { validator: validateNewPassword, trigger: "blur" },
       ],
+    });
+    const { resetFields, validate, validateInfos } = useForm(login, rules);
+    const saveLoading = ref(false); // 登录按钮loading
+    const resetPwdVisible = ref(false); // 修改密码，默认不可见
+    const captchaImageChange = () => {
+      key = Math.random().toString();
+      captchaImage.value =
+        process.env.VUE_APP_BASE_URL +
+        "/oauth/anno/captcha?tenant=MDAwMA==&key=" +
+        key;
     };
-    const saveLoading = false; // 登录按钮loading
-    const resetPwdVisible = false; // 修改密码，默认不可见
-    const captchaImageChange = () => {};
-    const updateUser = () => {};
+    onMounted(() => {
+      captchaImageChange();
+    });
+    const reset = () => {
+      resetFields();
+    };
+    const updateUser = () => {
+      validate().then((res) => {
+        saveLoading.value = true;
+      });
+    };
     return {
       login,
       updateUser,
@@ -144,6 +173,7 @@ export default defineComponent({
       rules,
       version,
       captchaImage,
+      validateInfos,
     };
   },
 });
