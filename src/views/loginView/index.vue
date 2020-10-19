@@ -95,12 +95,14 @@ import {
 import { useForm } from "@ant-design-vue/use";
 import { UserInfo } from "@/model/interface/login/login";
 import loginDto from "@/model/DTO/login/login";
+import { Response } from "@/model/interface/common";
 import {
   validateUsername,
   validatePassword,
   validateNewPassword,
 } from "@/utils/validate.ts";
 import { userLogin } from "@/api/baseCenter/login/login";
+
 export default defineComponent({
   name: "Login",
   components: {},
@@ -168,7 +170,11 @@ export default defineComponent({
         ld.password = login.password;
         ld.key = key;
         ld.code = login.validateCode;
-        userLogin(ld);
+        userLogin(ld).then((res: Response) => {
+          // if (res.code === "0") {
+          console.log(res);
+          // }
+        });
       });
     };
     return {

@@ -3,8 +3,7 @@ import { getCookie, SetCookie } from "@/utils/auth";
 import loginDto from "@/model/DTO/login/login";
 import { Response } from "@/model/interface/common";
 
-//登录
-export async function userLogin(data: loginDto): Promise<Response> {
+async function userLogin(data: loginDto): Promise<Response> {
   return await baseFetch({
     url: "/oauth/anno/token",
     method: "post",
@@ -13,7 +12,14 @@ export async function userLogin(data: loginDto): Promise<Response> {
       Authorization: "Basic enVpaG91X3VpOnp1aWhvdV91aV9zZWNyZXQ=",
     },
   }).then((res) => {
-    return {} as Response;
+    const result: Response = {
+      code: res.code,
+      success: res.success || res.isSuccess,
+      msg: res.msg,
+      data: res.data,
+    };
+    return result;
   });
 }
-// export default { userLogin };
+
+export { userLogin };

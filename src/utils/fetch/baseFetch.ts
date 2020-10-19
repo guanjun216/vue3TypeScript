@@ -1,6 +1,7 @@
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosInstance, AxiosResponse } from "axios";
 import { message } from "ant-design-vue";
 import { getCookie, SetCookie } from "@/utils/auth";
+import { Response } from "@/model/interface/common";
 
 // 创建axios 实例
 export const instance: AxiosInstance = axios.create({
@@ -36,7 +37,6 @@ instance.interceptors.response.use(
   (response) => {
     // 这里处理一些response 正常放回时的逻辑
     const res = response.data;
-
     if (
       res &&
       (res.code === 12 ||
@@ -52,7 +52,12 @@ instance.interceptors.response.use(
         window.location.href = "/#/login/notice";
       }
     }
-
+    // const result: Response = {
+    //   code: res.code,
+    //   success: res.success,
+    //   msg: res.msg,
+    //   data: res.data,
+    // };
     return res;
   },
   (error) => {
