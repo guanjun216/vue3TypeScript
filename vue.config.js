@@ -1,82 +1,108 @@
+const CompressionWebpackPlugin = require("compression-webpack-plugin");
+const IS_PRODUCTION = process.env.NODE_ENV === "production";
 const path = require("path");
-const sourceMap = process.env.NODE_ENV === "development";
-
+function resolve(dir) {
+  return path.join(__dirname, dir);
+}
+const cdn = {
+  css: [],
+  js: [],
+};
+// const host = window.location.host;
+const externals = {};
 module.exports = {
-  // 基本路径
   publicPath: "./",
-  // 输出文件目录
   outputDir: "dist",
-  // eslint-loader 是否在保存的时候检查
-  lintOnSave: false,
-  // webpack配置
-  // 参考 https://github.com/vuejs/vue-cli/blob/dev/docs/webpack.md
-  chainWebpack: (config) => {
-    config.rule("ts").use("babel-loader");
+  assetsDir: "static",
+  indexPath: "index.html",
+  productionSourceMap: false, // 关闭sourceMap
+  devServer: {
+    // host: "localhost", //target host
+    port: 8080,
+    open: true,
+    hot: true,
+    //proxy:{'/api':{}},代理器中设置/api,项目中请求路径为/api的替换为target
+    // proxy: {
+    // "/api": {
+    // target: process.env.BASE_URL, //代理地址，这里设置的地址会代替axios中设置的baseURL http://123.56.85.24:5000/
+    // changeOrigin: true, // 如果接口跨域，需要进行这个参数配置
+    //ws: true, // proxy websockets
+    // pathRewrite: {
+    // "^/api": "/api",
+    //pathRewrite: {'^/api': '/'} 重写之后url为 http://192.168.1.16:8085/xxxx
+    //pathRewrite: {'^/api': '/api'} 重写之后url为 http://192.168.1.16:8085/api/xxxx
+    // },
+    // },
+    // },
   },
-  configureWebpack: (config) => {
-    if (process.env.NODE_ENV === "production") {
-      // 为生产环境修改配置
-      config.mode = "production";
-    } else {
-      // 为开发环境修改配置
-      config.mode = "development";
-    }
-
-    Object.assign(config, {
-      // 开发生产共同配置
-      resolve: {
-        extensions: [".js", ".vue", ".json", ".ts", ".tsx"],
-        alias: {
-          //   vue$: "vue/dist/vue.js",
-          "@": path.resolve(__dirname, "./src"),
-          "@c": path.resolve(__dirname, "./src/components"),
+  lintOnSave: false,
+  configureWebpack: {
+    // Webpack配置
+    devtool: "none", // webpack内关闭sourceMap
+    optimization: {
+      // 优化配置
+      splitChunks: {
+        chunks: "all",
+        cacheGroups: {
+          // 拆分Vue
+          vue: {
+            test: /[\\/]node_modules[\\/]vue[\\/]/,
+            name: "chunk-vue",
+          },
         },
       },
-    });
+    },
+    resolve: {
+      alias: {
+        "@": resolve("src"), // 主目录
+        views: resolve("src/views"), // 页面
+        components: resolve("src/components"), // 组件
+        api: resolve("src/api"), // 接口
+        utils: resolve("src/utils"), // 通用功能
+        assets: resolve("src/assets"), // 静态资源
+        style: resolve("src/style"), // 通用样式
+      },
+    },
   },
-  // 生产环境是否生成 sourceMap 文件
-  productionSourceMap: sourceMap,
-  // css相关配置
+  chainWebpack(config) {
+    if (IS_PRODUCTION) {
+      config.plugin("html").tap((args) => {
+        args[0].cdn = cdn;
+        return args;
+      });
+      config.externals(externals);
+      config.plugin("html").tap((args) => {
+        args[0].minify.minifyCSS = true;
+        return args;
+      });
+      // gzip需要nginx进行配合
+      config
+        .plugin("compression")
+        .use(CompressionWebpackPlugin)
+        .tap(() => [
+          {
+            test: /\.js$|\.html$|\.css/, // 匹配文件名
+            threshold: 10240, // 超过10k进行压缩
+            deleteOriginalAssets: true, // 是否删除源文件，这里最好不要删除
+          },
+        ]);
+    }
+  },
   css: {
     // 是否使用css分离插件 ExtractTextPlugin
-    extract: true,
+    extract: !!IS_PRODUCTION,
     // 开启 CSS source maps?
     sourceMap: false,
     // css预设器配置项
-    loaderOptions: {},
-    // 设置为 false 后你就可以去掉文件名中的 .module 并将所有的 *.(css|scss|sass|less|styl(us)?)
+    // 启用 CSS modules for all css / pre-processor files.
     requireModuleExtension: false,
+    loaderOptions: {
+      sass: {},
+      less: {
+        lessOptions: {
+          javascriptEnabled: true,
+        },
+      },
+    },
   },
-  // use thread-loader for babel & TS in production build
-  // enabled by default if the machine has more than 1 cores
-  parallel: require("os").cpus().length > 1,
-  // PWA 插件相关配置
-  // see https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa
-  pwa: {},
-  // webpack-dev-server 相关配置
-  devServer: {
-    open: true, // 启动后自动打开浏览器
-    host: "localhost",
-    port: 9002,
-    https: false,
-    hot: true,
-    // hotOnly: false,
-    // proxy: {
-    //   // 设置代理
-    //   // proxy all requests starting with /api to jsonplaceholder
-    //   "/api": {
-    //     target: "http://localhost:3000/",
-    //     changeOrigin: true,
-    //     ws: true,
-    //     pathRewrite: {
-    //       "^/api": "",
-    //     },
-    //   },
-    // },
-    // before: (app) => {},
-  },
-  // 第三方插件配置
-  //   pluginOptions: {
-  // ...
-  //   },
 };

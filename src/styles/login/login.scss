@@ -22,7 +22,7 @@
       background: url("~@/assets/img/" + $bgImg) 10px center no-repeat;
     }
     /*-- 使用mixin --*/
-    /deep/ .el-input__inner {
+    /deep/ .ant-input {
       width: 100%;
       height: 46px;
       background-color: rgba(255, 255, 255, 1);
@@ -34,29 +34,29 @@
         @include activeCss();
       }
     }
-    /deep/ .active .el-input__inner {
+    /deep/ .active .ant-input {
       @include activeCss();
     }
-    /deep/ .login-username .el-input__inner {
+    /deep/ .login-username .ant-input {
       @include setBgImg("loginUsername.png");
     }
-    /deep/ .login-password .el-input__inner {
+    /deep/ .login-password .ant-input {
       @include setBgImg("loginPassword.png");
     }
-    /deep/ .login-validate-code .el-input__inner {
+    /deep/ .login-validate-code .ant-input {
       @include setBgImg("loginValidateCode.png");
     }
     /*-- 图标高亮 --*/
-    /deep/ .login-username:hover .el-input__inner,
-    /deep/ .login-username.active .el-input__inner {
+    /deep/ .login-username:hover .ant-input,
+    /deep/ .login-username.active .ant-input {
       @include setBgImg("loginUsernameActive.png");
     }
-    /deep/ .login-password:hover .el-input__inner,
-    /deep/ .login-password.active .el-input__inner {
+    /deep/ .login-password:hover .ant-input,
+    /deep/ .login-password.active .ant-input {
       @include setBgImg("loginPasswordActive.png");
     }
-    /deep/ .login-validate-code:hover .el-input__inner,
-    /deep/ .login-validate-code.active .el-input__inner {
+    /deep/ .login-validate-code:hover .ant-input,
+    /deep/ .login-validate-code.active .ant-input {
       @include setBgImg("loginValidateCodeActive.png");
     }
     /deep/ .login-btn {
