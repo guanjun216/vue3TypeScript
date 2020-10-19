@@ -6,5 +6,12 @@ interface UserInfo {
   screenWidth: String;
   screenHeight: String;
 }
-
-export type {UserInfo}
+interface User {
+    account: String;
+    password: String;
+    tenant: String;
+    key: String;
+    code: String;
+    grantType: String;
+}
+export type {UserInfo,User}

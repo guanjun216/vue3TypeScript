@@ -94,12 +94,13 @@ import {
 } from "vue";
 import { useForm } from "@ant-design-vue/use";
 import { UserInfo } from "@/model/interface/login/login";
+import loginDto from "@/model/DTO/login/login";
 import {
   validateUsername,
   validatePassword,
   validateNewPassword,
 } from "@/utils/validate.ts";
-
+import { userLogin } from "@/api/baseCenter/login/login";
 export default defineComponent({
   name: "Login",
   components: {},
@@ -162,6 +163,12 @@ export default defineComponent({
     const updateUser = () => {
       validate().then((res) => {
         saveLoading.value = true;
+        let ld: loginDto = new loginDto();
+        ld.account = login.username;
+        ld.password = login.password;
+        ld.key = key;
+        ld.code = login.validateCode;
+        userLogin(ld);
       });
     };
     return {
