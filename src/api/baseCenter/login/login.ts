@@ -1,8 +1,13 @@
 import { instance as baseFetch } from "@/utils/fetch/baseFetch";
-import { getCookie, SetCookie } from "@/utils/auth";
+import { SetCookie } from "@/utils/auth";
 import loginDto from "@/model/DTO/login/login";
 import { Response } from "@/model/interface/common";
-
+import { CookiesInfo } from "@/model/Enum/common";
+/**
+ * @param {loginDto} 登录DTO对象
+ * @returns {Promise<Response>} 类型为Response接口的Promise对象
+ * @description 用户登录请求，请求Token数据并保存到cookies
+ */
 async function userLogin(data: loginDto): Promise<Response> {
   return await baseFetch({
     url: "/oauth/anno/token",
@@ -13,11 +18,21 @@ async function userLogin(data: loginDto): Promise<Response> {
     },
   }).then((res) => {
     const result: Response = {
-      code: res.code,
+      code: String(res.code),
       success: res.success || res.isSuccess,
       msg: res.msg,
       data: res.data,
     };
+    if (result.code === "0") {
+      SetCookie(
+        process.env.VUE_APP_MODE + CookiesInfo.TOKEN_NAME,
+        "Bearer " + res.data.token
+      );
+      SetCookie(
+        process.env.VUE_APP_MODE + CookiesInfo.COOKIES_NAME,
+        JSON.stringify(res.data)
+      );
+    }
     return result;
   });
 }

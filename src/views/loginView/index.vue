@@ -20,8 +20,9 @@
             >
               <a-form-item class="login-form-item" name="username">
                 <a-input
-                  class="login-username"
-                  :class="login.username.length >= 6 ? 'active' : ''"
+                  :class="`login-username ${
+                    login.username.length >= 6 ? 'active' : ''
+                  }`"
                   v-model:value="login.username"
                   placeholder="请输入登录账户"
                   :maxlength="16"
@@ -29,8 +30,9 @@
               </a-form-item>
               <a-form-item class="login-form-item" name="password">
                 <a-input
-                  class="login-password"
-                  :class="login.password.length >= 6 ? 'active' : ''"
+                  :class="`login-password ${
+                    login.password.length >= 6 ? 'active' : ''
+                  }`"
                   type="password"
                   v-model:value="login.password"
                   placeholder="请输入登录密码"
@@ -84,6 +86,7 @@
     <!-- <reset-pwd :resetPwdVisible="resetPwdVisible" @closeDialog="closeHandle" /> -->
   </div>
 </template>
+
 <script lang="ts">
 import {
   defineComponent,
@@ -102,12 +105,12 @@ import {
   validateNewPassword,
 } from "@/utils/validate.ts";
 import { userLogin } from "@/api/baseCenter/login/login";
-
+import { useRouter } from "vue-router";
 export default defineComponent({
   name: "Login",
   components: {},
   setup() {
-    const internalInstance = getCurrentInstance();
+    const instance = getCurrentInstance();
     let key: String = ""; //随机值
     const login = reactive({
       username: "",
@@ -126,14 +129,28 @@ export default defineComponent({
           message: "请输入账号",
           trigger: "blur",
         },
-        { validator: validateUsername, trigger: "blur" },
+        {
+          validator: validateUsername,
+          trigger: "blur",
+        },
       ],
       password: [
-        { required: true, message: "请输入密码", trigger: "blur" },
-        { validator: validatePassword, trigger: "blur" },
+        {
+          required: true,
+          message: "请输入密码",
+          trigger: "blur",
+        },
+        {
+          validator: validatePassword,
+          trigger: "blur",
+        },
       ],
       validateCode: [
-        { required: true, message: "请输入验证码", trigger: "blur" },
+        {
+          required: true,
+          message: "请输入验证码",
+          trigger: "blur",
+        },
         {
           min: 1,
           max: 20,
@@ -142,8 +159,15 @@ export default defineComponent({
         },
       ],
       newPassword: [
-        { required: true, message: "请输入密码", trigger: "blur" },
-        { validator: validateNewPassword, trigger: "blur" },
+        {
+          required: true,
+          message: "请输入密码",
+          trigger: "blur",
+        },
+        {
+          validator: validateNewPassword,
+          trigger: "blur",
+        },
       ],
     });
     const { resetFields, validate, validateInfos } = useForm(login, rules);
@@ -160,6 +184,7 @@ export default defineComponent({
       captchaImageChange();
     });
     const reset = () => {
+      captchaImageChange();
       resetFields();
     };
     const updateUser = () => {
@@ -171,9 +196,12 @@ export default defineComponent({
         ld.key = key;
         ld.code = login.validateCode;
         userLogin(ld).then((res: Response) => {
-          // if (res.code === "0") {
-          console.log(res);
-          // }
+          if (res.code === "0") {
+            reset();
+            useRouter().push({
+              path: "/Home",
+            });
+          }
         });
       });
     };
@@ -191,6 +219,7 @@ export default defineComponent({
   },
 });
 </script>
+
 <style lang="scss" scoped>
-@import "~@/styles/login/login.scss";
+@import "~@/assets/styles/login/login.scss";
 </style>

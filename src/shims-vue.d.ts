@@ -8,8 +8,3 @@ declare module '*.scss' {
   const res: any
   export default res
 }
-// declare module 'axios' {
-//   interface AxiosInstance {
-//     (config: AxiosRequestConfig): Promise<any>
-//   }
-// }

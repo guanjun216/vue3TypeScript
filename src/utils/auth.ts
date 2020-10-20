@@ -1,4 +1,4 @@
-export function SetCookie(name: String, value: String): void {
+export function SetCookie(name: string, value: string): void {
   //设置名称为name,值为value的Cookie
   var expdate = new Date(); //初始化时间
   expdate.setTime(expdate.getTime() + 30 * 60 * 1000); //时间
@@ -13,7 +13,7 @@ export function SetCookie(name: String, value: String): void {
     ";path=/";
 }
 
-export function getCookie(c_name: String): String {
+export function getCookie(c_name: string): string {
   if (document.cookie.length > 0) {
     let c_start = document.cookie.indexOf(c_name + "=");
     if (c_start != -1) {
