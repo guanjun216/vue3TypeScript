@@ -1,4 +1,6 @@
+import { userLogin } from "@/api/baseCenter/login/login";
 import { User } from "@/model/interface/login/login";
+
 export default class loginDto implements User {
   public account: String = "";
   public password: String = "";

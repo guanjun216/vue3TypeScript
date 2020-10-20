@@ -1,5 +1,6 @@
 import { defineComponent, computed } from "vue";
 import { mapGetters } from "vuex";
+
 export default defineComponent({
     name: "Home",
     setup() {

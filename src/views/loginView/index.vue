@@ -187,6 +187,7 @@ export default defineComponent({
       captchaImageChange();
       resetFields();
     };
+
     const updateUser = () => {
       validate().then((res) => {
         saveLoading.value = true;
