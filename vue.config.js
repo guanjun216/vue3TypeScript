@@ -1,3 +1,4 @@
+/* jshint esversion:6 */
 const CompressionWebpackPlugin = require("compression-webpack-plugin");
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
 const path = require("path");
