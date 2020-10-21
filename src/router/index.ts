@@ -25,8 +25,8 @@ router.beforeEach((to, from, next) => {
     process.env.VUE_APP_MODE + CookiesInfo.COOKIES_NAME
   );
   let loginInfo = loginInfoJson ? JSON.parse(loginInfoJson) : "";
-  if (!loginInfo) {
-    next({ path: "/login" });
+  if (to.name !== "Login" && loginInfo === "") {
+    next({ path: "/login", name: "Login" });
   } else {
     next();
   }

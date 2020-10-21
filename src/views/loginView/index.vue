@@ -106,12 +106,14 @@ import {
 } from "@/utils/validate.ts";
 import { userLogin } from "@/api/baseCenter/login/login";
 import { useRouter } from "vue-router";
+import Message from "@/components/common/element/message/index.js";
+import Notify from "@/components/common/element/notification/index.js";
 export default defineComponent({
   name: "Login",
   components: {},
   setup() {
     const instance = getCurrentInstance();
-    let key: String = ""; //随机值
+    let key: string = ""; //随机值
     const login = reactive({
       username: "",
       password: "",
@@ -187,7 +189,7 @@ export default defineComponent({
       captchaImageChange();
       resetFields();
     };
-
+    const router = useRouter();
     const updateUser = () => {
       validate().then((res) => {
         saveLoading.value = true;
@@ -197,11 +199,20 @@ export default defineComponent({
         ld.key = key;
         ld.code = login.validateCode;
         userLogin(ld).then((res: Response) => {
+          saveLoading.value = false;
           if (res.code === "0") {
             reset();
-            useRouter().push({
-              path: "/Home",
+
+            router.push({
+              path: "/",
             });
+          } else {
+            instance &&
+              instance.appContext.config.globalProperties.$message.error(
+                res.msg,
+                60000
+              );
+            // Message({ type: "error", message: res.msg });
           }
         });
       });

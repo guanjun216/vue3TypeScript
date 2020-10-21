@@ -1,7 +1,13 @@
 interface Response {
-  code: String;
+  code: string;
   success: Boolean;
   data: Object | Array<any>;
-  msg: String;
+  msg: string;
 }
-export { Response };
+interface User {
+  userId: string;
+  account: string;
+  avatar: string;
+  name: string;
+}
+export { Response, User };

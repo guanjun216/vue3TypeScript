@@ -2,6 +2,7 @@
 const CompressionWebpackPlugin = require("compression-webpack-plugin");
 const IS_PRODUCTION = process.env.NODE_ENV === "production";
 const path = require("path");
+const merge = require("webpack-merge");
 function resolve(dir) {
   return path.join(__dirname, dir);
 }
@@ -75,12 +76,36 @@ module.exports = {
           },
         ]);
     }
+    // config.module
+    //   .rule("scss")
+    //   .use("sass-loader")
+    //   .tap((options) =>
+    //     merge(options, {
+    //       includePaths: [path.resolve(__dirname, "node_modules")],
+    //     })
+    //   );
+    // config.module
+    //   .rule("less")
+    //   .use("less-loader")
+    //   .tap((options) =>
+    //     merge(options, {
+    //       includePaths: [path.resolve(__dirname, "node_modules")],
+    //     })
+    //   );
+    // config.module
+    //   .rule("css")
+    //   .use("css-loader")
+    //   .tap((options) =>
+    //     merge(options, {
+    //       includePaths: [path.resolve(__dirname, "node_modules")],
+    //     })
+    //   );
   },
   css: {
     // 是否使用css分离插件 ExtractTextPlugin
     extract: !!IS_PRODUCTION,
     // 开启 CSS source maps?
-    sourceMap: false,
+    sourceMap: true,
     // css预设器配置项
     // 启用 CSS modules for all css / pre-processor files.
     requireModuleExtension: false,

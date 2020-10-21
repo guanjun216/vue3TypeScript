@@ -1,17 +1,17 @@
 interface UserInfo {
-  username: String;
-  password: String;
-  validateCode: String;
-  setLDiv: String;
-  screenWidth: String;
-  screenHeight: String;
+  username: string;
+  password: string;
+  validateCode: string;
+  setLDiv: string;
+  screenWidth: string;
+  screenHeight: string;
 }
 interface User {
-    account: String;
-    password: String;
-    tenant: String;
-    key: String;
-    code: String;
-    grantType: String;
+    account: string;
+    password: string;
+    tenant: string;
+    key: string;
+    code: string;
+    grantType: string;
 }
 export type {UserInfo,User}
