@@ -6,5 +6,8 @@ export const getters = {
   visitedViews: (state: any) => state.tagsView.visitedViews,
   cachedViews: (state: any) => state.tagsView.cachedViews,
   errorLogs: (state: any) => state.errorLog.logs,
+  showSettings: (state: any) => state.settings.showSettings,
+  needTagsView: (state: any) => state.settings.tagsView,
+  fixedHeader: (state: any) => state.settings.fixedHeader,
 };
 // export default { getters };

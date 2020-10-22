@@ -105,7 +105,7 @@ module.exports = {
     // 是否使用css分离插件 ExtractTextPlugin
     extract: !!IS_PRODUCTION,
     // 开启 CSS source maps?
-    sourceMap: true,
+    sourceMap: false,
     // css预设器配置项
     // 启用 CSS modules for all css / pre-processor files.
     requireModuleExtension: false,

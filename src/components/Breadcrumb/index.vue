@@ -1,18 +1,15 @@
 <template>
   <a-breadcrumb class="app-breadcrumb" separator="/">
-    <transition-group name="breadcrumb">
-      <a-breadcrumb-item
-        v-for="(item, index) in levelList.list"
-        :key="item.path"
+    <!-- <transition-group name="breadcrumb"> -->
+    <a-breadcrumb-item v-for="(item, index) in levelList.list" :key="item.path">
+      <span
+        v-if="item.redirect === 'noRedirect' || index == levelList.length - 1"
+        class="no-redirect"
+        >{{ item.meta.title }}</span
       >
-        <span
-          v-if="item.redirect === 'noRedirect' || index == levelList.length - 1"
-          class="no-redirect"
-          >{{ item.meta.title }}</span
-        >
-        <span v-else>{{ item.meta.title }}</span>
-      </a-breadcrumb-item>
-    </transition-group>
+      <span v-else>{{ item.meta.title }}</span>
+    </a-breadcrumb-item>
+    <!-- </transition-group> -->
   </a-breadcrumb>
 </template>
 <script lang="ts">
@@ -20,6 +17,7 @@ import { defineComponent, reactive } from "vue";
 import pathToRegexp from "path-to-regexp";
 import { createRouter, RouteLocationMatched, useRoute } from "vue-router";
 export default defineComponent({
+  name: "Breadcrumb",
   setup() {
     const levelList = reactive({ list: [] });
     const route = useRoute();

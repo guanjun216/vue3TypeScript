@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import Login from "@/views/loginView/index.vue";
 import { getCookie } from "@/utils/auth";
+import Layout from "../views/layout/index.vue";
 import { CookiesInfo } from "@/model/Enum/common";
 const routes: Array<RouteRecordRaw> = [
   {
@@ -10,9 +11,20 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: "/",
-    name: "Home",
-    component: () =>
-      import(/* webpackChunkName: "Home" */ "../views/home/Home"),
+    redirect: "/home",
+    component: Layout,
+    children: [
+      {
+        path: "home",
+        component: () => import("@/views/home/Home"),
+        name: "Home",
+        meta: {
+          title: "首页",
+          icon: "dashboard",
+          affix: true,
+        },
+      },
+    ],
   },
 ];
 

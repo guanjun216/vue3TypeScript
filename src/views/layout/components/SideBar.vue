@@ -45,14 +45,14 @@
         </a-menu-item>
         <template v-for="item in items">
           <template v-if="item.subs">
-            <a-submenu :index="item.index" :key="item.index">
+            <a-sub-menu :index="item.index" :key="item.index">
               <template v-slot:title>
                 <i :class="item.icon" v-show="iconFlag"></i>
                 <span>{{ item.title }}</span>
               </template>
               <template>
                 <template v-for="(subItem, index) in item.subs">
-                  <a-submenu
+                  <a-sub-menu
                     v-if="subItem.subs"
                     :index="subItem.title"
                     :key="index"
@@ -68,7 +68,7 @@
                       :index="threeItem.index"
                       >{{ threeItem.title }}</a-menu-item
                     >
-                  </a-submenu>
+                  </a-sub-menu>
                   <a-menu-item
                     v-else
                     :index="subItem.index"
@@ -77,7 +77,7 @@
                   >
                 </template>
               </template>
-            </a-submenu>
+            </a-sub-menu>
           </template>
           <template v-else>
             <a-menu-item :index="item.index" :key="item.index">
@@ -110,7 +110,7 @@ export default defineComponent({
     let token = getCookie(process.env.VUE_APP_MODE + "EocToken");
     if (!token) {
       router.push({
-        path: "/login/notice",
+        path: "/login",
       });
     }
     const route = useRoute();
@@ -125,13 +125,14 @@ export default defineComponent({
     isBaseMenu.value = route.path.indexOf("center") == -1 ? true : false;
     let loginInfo =
       JSON.parse(getCookie(process.env.VUE_APP_MODE + "EocLoginInfo")) || {};
+    // console.log(loginInfo);
     const user: User = {
-      userId: loginInfo.user.userId,
-      account: loginInfo.user.account,
+      userId: loginInfo.userId,
+      account: loginInfo.account,
       avatar:
-        loginInfo.user.avatar ||
+        loginInfo.avatar ||
         "https://wpimg.wallstcn.com/9e2a5d0a-bd5b-457f-ac8e-86554616c87b.jpg",
-      name: loginInfo.user.name,
+      name: loginInfo.name,
     };
 
     const defaultActive = computed(() => {

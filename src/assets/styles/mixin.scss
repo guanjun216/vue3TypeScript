@@ -1,0 +1,275 @@
+@mixin clearfix {
+  &:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+}
+
+@mixin scrollBar {
+  &::-webkit-scrollbar-track-piece {
+    background: #d3dce6;
+  }
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #99a9bf;
+    border-radius: 20px;
+  }
+}
+
+@mixin relative {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+@mixin pct($pct) {
+  width: #{$pct};
+  position: relative;
+  margin: 0 auto;
+}
+
+@mixin triangle($width, $height, $color, $direction) {
+  $width: $width/2;
+  $color-border-style: $height solid $color;
+  $transparent-border-style: $width solid transparent;
+  height: 0;
+  width: 0;
+
+  @if $direction==up {
+    border-bottom: $color-border-style;
+    border-left: $transparent-border-style;
+    border-right: $transparent-border-style;
+  }
+
+  @else if $direction==right {
+    border-left: $color-border-style;
+    border-top: $transparent-border-style;
+    border-bottom: $transparent-border-style;
+  }
+
+  @else if $direction==down {
+    border-top: $color-border-style;
+    border-left: $transparent-border-style;
+    border-right: $transparent-border-style;
+  }
+
+  @else if $direction==left {
+    border-right: $color-border-style;
+    border-top: $transparent-border-style;
+    border-bottom: $transparent-border-style;
+  }
+}
+
+
+//竖向滚动条
+@mixin scrollbar-vertical {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+//横向滚动条
+@mixin scrollbar-transverse {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+//单行文字截取
+@mixin single-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+//多行文字截取
+@mixin multi-text($multiType:2) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  word-break:break-all;
+  display: -webkit-box;
+  -webkit-line-clamp: $multiType;
+  -webkit-box-orient: vertical;
+}
+
+//自动换行
+@mixin break-word {
+  word-wrap: break-word;
+  word-break: normal; 
+}
+
+//强制换行
+@mixin forced-break-word {
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+//禁止文字选择
+@mixin txtSelectNone {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+@mixin flex-display {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+}
+
+@mixin flex($v:1) {
+  -webkit-box-flex: $v;
+  -webkit-flex: $v;
+  flex: $v;
+}
+
+//确定子元素的排列方向方向flex-direction
+//row | row-reverse | column | column-reverse;
+//默认row
+@mixin flex-direction($dirType:row) {
+  @if $dirType==column {
+    -webkit-box-orient: vertical;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+  } @else if $dirType==row-reverse {
+    -webkit-box-direction: reverse;
+    -webkit-flex-direction: row-reverse;
+    flex-direction: row-reverse;
+  } @else if $dirType==column-reverse {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: reverse;
+    -webkit-flex-direction: column-reverse;
+    flex-direction: column-reverse;
+  } @else {
+    -webkit-box-orient: horizontal;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+  }
+}
+
+//水平位置justify-content：用于设置或检索弹性盒子元素在主轴（横轴）方向上的对齐方式
+/**
+ * flex-start  	    默认值。项目位于容器的开头
+ * flex-end  	      项目位于容器的结尾
+ * center  	        项目位于容器的中心
+ * space-between  	项目位于各行之间留有空白的容器内
+ * space-around  	  项目位于各行之前、之间、之后都留有空白的容器内
+ */
+@mixin flex-justify-content($justifyType:flex-start) {
+  @if $justifyType==flex-end {
+    -webkit-box-pack: end;
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end;
+  } @else if $justifyType==center {
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+  } @else if $justifyType==space-between {
+    -webkit-box-pack: justify;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+  } @else if $justifyType==space-around {
+    -webkit-box-pack: start;
+    -webkit-justify-content: space-around;
+    justify-content: space-around;
+  } @else {
+    -webkit-box-pack: start;
+    -webkit-justify-content: flex-start;
+    justify-content: flex-start;
+  }
+}
+
+//垂直方向align-items：属性定义flex子项在flex容器的当前行的侧轴（纵轴）方向上的对齐方式
+/**
+ * flex-start   默认值。交叉轴的起点对齐
+ * center       交叉轴的中点对齐
+ * baseline     项目的第一行文字的基线对齐
+ * flex-end     元素位于容器的结尾
+ */
+@mixin flex-align-items($alignType:flex-start) {
+  @if $alignType==flex-end {
+    -webkit-box-align: end;
+    -webkit-align-items: flex-end;
+    align-items: flex-end;
+  } @else if $alignType==center {
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+  } @else if $alignType==baseline {
+    -webkit-box-align: baseline;
+    -webkit-align-items: baseline;
+    align-items: baseline;
+  } @else if $alignType==stretch {
+    -webkit-box-align: stretch;
+    -webkit-align-items: stretch;
+    align-items: stretch;
+  } @else {
+    -webkit-box-align: start;
+    -webkit-justify-content: flex-start;
+    justify-content: flex-start;
+  }
+}
+
+@mixin flex-order($order:0) {
+  -webkit-box-ordinal-group: $order;
+  order: $order;
+}
+
+//水平，垂直方向居中
+@mixin flex-center {
+  @include flex-display;
+  @include flex-justify-content(center);
+  @include flex-align-items(center);
+}
+
+//水平方向居中(横向)
+@mixin flex-center-justify {
+  @include flex-display;
+  @include flex-justify-content(center);
+}
+//垂直方向居中(纵向)
+@mixin flex-center-align {
+  @include flex-display;
+  @include flex-align-items(center);
+}
+
+//水平布局
+@mixin layout-justify($order:space-between) {
+  @include flex-display;
+  @include flex-direction(row);
+  @include flex-justify-content($order);
+}
+
+//垂直布局
+@mixin layout-align($order:space-between) {
+  @include flex-display;
+  @include flex-direction(column);
+  @include flex-justify-content($order);
+}
+
+//模拟a标签获取鼠标焦点后标签下有下划线
+@mixin imitateAunderline() {
+  border-bottom: 1px solid;
+  border-bottom-color: inherit
+}
+
+//缩放div元素
+@mixin transform-scale($scale:1) {
+  transform: scale($scale);
+  -ms-transform: scale($scale); 	/* IE 9 */
+  -moz-transform: scale($scale); 	/* Firefox */
+  -webkit-transform: scale($scale); /* Safari 和 Chrome */
+  -o-transform: scale($scale); 	/* Opera */
+}
+
+//2D变换角度
+@mixin transform($deg:0deg) {
+  transform: rotate($deg);
+  -ms-transform: rotate($deg); 	/* IE 9 */
+  -moz-transform: rotate($deg); 	/* Firefox */
+  -webkit-transform: rotate($deg); /* Safari 和 Chrome */
+  -o-transform: rotate($deg); 	/* Opera */
+}
