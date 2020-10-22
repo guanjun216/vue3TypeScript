@@ -5,6 +5,7 @@ interface UserInfo {
   setLDiv: string;
   screenWidth: string;
   screenHeight: string;
+  key:string;
 }
 interface User {
     account: string;

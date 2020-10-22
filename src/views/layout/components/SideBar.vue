@@ -91,12 +91,21 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, reactive, ref } from "vue";
+import {
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  onMounted,
+  reactive,
+  ref,
+} from "vue";
 import { useRoute, useRouter } from "vue-router";
 import variables from "@/assets/styles/variables.scss";
 import { User } from "@/model/interface/common";
 import { IsPC } from "@/utils/index";
 import { getCookie } from "@/utils/auth";
+import LoginOperation from "@/controller/login/loginController";
+import { instance } from "@/utils/fetch/baseFetch";
 export default defineComponent({
   name: "Sidebar",
   props: {
@@ -114,7 +123,6 @@ export default defineComponent({
       });
     }
     const route = useRoute();
-    const items = reactive([]);
     const iconFlag = ref(false);
     if (IsPC()) {
       iconFlag.value = false;
@@ -122,10 +130,22 @@ export default defineComponent({
       iconFlag.value = true;
     }
     const isBaseMenu = ref(false);
+    const instance = getCurrentInstance();
+    let items: any[] = reactive([]);
+    LoginOperation.getInstance(instance?.appContext.app)
+      .getMenuList(route.path)
+      .then((res) => {
+        // items = items.concat(res);
+        res.map((item) => {
+          items.push(item);
+        });
+      });
+    console.log(items);
+    onMounted(() => {});
+
     isBaseMenu.value = route.path.indexOf("center") == -1 ? true : false;
     let loginInfo =
       JSON.parse(getCookie(process.env.VUE_APP_MODE + "EocLoginInfo")) || {};
-    // console.log(loginInfo);
     const user: User = {
       userId: loginInfo.userId,
       account: loginInfo.account,
@@ -149,6 +169,7 @@ export default defineComponent({
       isBaseMenu,
       defaultActive,
       variables,
+      goThis,
     };
   },
 });
@@ -171,7 +192,19 @@ export default defineComponent({
     height: calc(100vh - 73px);
     overflow-x: auto;
     color: #fff;
-
+    .ant-menu-root {
+      background-color: #202736;
+      .ant-menu-item {
+        color: #fff;
+        font-size: 14px;
+        a {
+          color: #fff;
+          &:hover {
+            color: #1890ff;
+          }
+        }
+      }
+    }
     .aside-top {
       height: 168px;
       position: relative;

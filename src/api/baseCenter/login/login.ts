@@ -1,5 +1,5 @@
 import { instance as baseFetch } from "@/utils/fetch/baseFetch";
-import { SetCookie } from "@/utils/auth";
+import { SetCookie, getCookie } from "@/utils/auth";
 import loginDto from "@/model/DTO/login/login";
 import { Response } from "@/model/interface/common";
 import { CookiesInfo } from "@/model/Enum/common";
@@ -24,25 +24,25 @@ async function userLogin(data: loginDto): Promise<Response> {
       msg: res.msg.toString(),
       data: res.data,
     };
-    if (result.code === "0") {
-      SetCookie(
-        process.env.VUE_APP_MODE + CookiesInfo.TOKEN_NAME,
-        "Bearer " + res.data.token
-      );
-      SetCookie(
-        process.env.VUE_APP_MODE + CookiesInfo.COOKIES_NAME,
-        JSON.stringify(res.data)
-      );
-    } else {
-      let msg = res.msg ? res.msg : "登录失败";
-      // message.error({ content: msg, duration: 5000 });
-      // notification.error({
-      //   message: "错误",
-      //   description: msg,
-      // });
-    }
     return result;
   });
 }
-
-export { userLogin };
+async function getMenu(): Promise<Response> {
+  return await baseFetch({
+    url: "/oauth/menu/router",
+    method: "get",
+    headers: {
+      token: getCookie(process.env.VUE_APP_MODE + "EocToken"),
+      tenant: "MDAwMA==",
+    },
+  }).then((res) => {
+    const result: Response = {
+      code: String(res.code),
+      success: res.success || res.isSuccess,
+      msg: res.msg.toString(),
+      data: res.data,
+    };
+    return result;
+  });
+}
+export { userLogin, getMenu };

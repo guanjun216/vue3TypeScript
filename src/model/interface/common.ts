@@ -1,7 +1,7 @@
 interface Response {
   code: string;
   success: Boolean;
-  data: Object | Array<any>;
+  data: any;
   msg: string;
 }
 interface User {

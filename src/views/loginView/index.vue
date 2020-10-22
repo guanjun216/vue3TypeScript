@@ -97,17 +97,14 @@ import {
 } from "vue";
 import { useForm } from "@ant-design-vue/use";
 import { UserInfo } from "@/model/interface/login/login";
-import loginDto from "@/model/DTO/login/login";
 import { Response } from "@/model/interface/common";
+import LoginController from "@/controller/login/loginController";
 import {
   validateUsername,
   validatePassword,
   validateNewPassword,
 } from "@/utils/validate.ts";
-import { userLogin } from "@/api/baseCenter/login/login";
 import { useRouter } from "vue-router";
-import Message from "@/components/common/element/message/index.js";
-import Notify from "@/components/common/element/notification/index.js";
 export default defineComponent({
   name: "Login",
   components: {},
@@ -121,6 +118,7 @@ export default defineComponent({
       setLDiv: "",
       screenWidth: "",
       screenHeight: "",
+      key: "",
     }) as UserInfo;
     const captchaImage = ref("");
     const version = ref("1.0.0");
@@ -193,28 +191,19 @@ export default defineComponent({
     const updateUser = () => {
       validate().then((res) => {
         saveLoading.value = true;
-        let ld: loginDto = new loginDto();
-        ld.account = login.username;
-        ld.password = login.password;
-        ld.key = key;
-        ld.code = login.validateCode;
-        userLogin(ld).then((res: Response) => {
-          saveLoading.value = false;
-          if (res.code === "0") {
-            reset();
-
-            router.push({
-              path: "/",
-            });
-          } else {
-            instance &&
-              instance.appContext.config.globalProperties.$message.error(
-                res.msg,
-                60000
-              );
-            // Message({ type: "error", message: res.msg });
-          }
-        });
+        login.key = key;
+        LoginController.getInstance(instance?.appContext.app)
+          .userLogin(login)
+          .then((res) => {
+            if (res.code === "0") {
+              router.push({ path: "/" });
+            } else {
+              reset();
+            }
+          })
+          .finally(() => {
+            saveLoading.value = false;
+          });
       });
     };
     return {
