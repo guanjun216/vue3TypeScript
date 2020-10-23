@@ -1,6 +1,6 @@
 import { defineComponent, computed, getCurrentInstance } from "vue";
 import { mapGetters } from "vuex";
-import style from "./styles/index.scss"
+import "./styles/index.scss"
 
 export default defineComponent({
     name: "Hamburger",
@@ -20,8 +20,8 @@ export default defineComponent({
             return (
                 <div style="padding: 0 15px;" onClick={toggleClick}>
                     <svg
-                        // class={`hamburger ${instanse?.props.isActive ? 'is-active' : ''}`}
-                        class={[style.hamburger, instanse?.props.isActive ? style.hamburger['is-active'] : null]}
+                        class={`hamburger ${instanse?.props.isActive ? 'is-active' : ''}`}
+                        // class={[style.hamburger, instanse?.props.isActive ? style.hamburger['is-active'] : null]}
                         viewBox="0 0 1024 1024"
                         width="64"
                         height="64"

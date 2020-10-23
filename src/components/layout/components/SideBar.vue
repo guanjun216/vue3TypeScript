@@ -16,11 +16,11 @@
         mode="vertical"
       >
         <template v-for="item in items" :key="item.index">
-          <a-menu-item :index="item.index">
-            <a href="javascript:void(0)" @click="goThis(item.index)">
-              <i :class="item.icon"></i>
-              <span>{{ item.title }}</span>
-            </a>
+          <a-menu-item :index="item.index" @click="goThis(item.index)">
+            <!-- <a href="javascript:void(0)" @click=""> -->
+            <i :class="item.icon"></i>
+            <span>{{ item.title }}</span>
+            <!-- </a> -->
           </a-menu-item>
         </template>
       </a-menu>
@@ -105,7 +105,6 @@ import { User } from "@/model/interface/common";
 import { IsPC } from "@/utils/index";
 import { getCookie } from "@/utils/auth";
 import LoginOperation from "@/controller/login/loginController";
-import { instance } from "@/utils/fetch/baseFetch";
 export default defineComponent({
   name: "Sidebar",
   props: {

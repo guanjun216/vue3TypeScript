@@ -1,9 +1,8 @@
-import { instance as baseFetch } from "@/utils/fetch/baseFetch";
-import { SetCookie, getCookie } from "@/utils/auth";
+import { instance as baseFetch } from "@/api/base/baseFetch";
+import { getCookie } from "@/utils/auth";
 import loginDto from "@/model/DTO/login/login";
 import { Response } from "@/model/interface/common";
-import { CookiesInfo } from "@/model/Enum/common";
-// import { message, notification } from "ant-design-vue";
+
 /**
  * @param {loginDto} 登录DTO对象
  * @returns {Promise<Response>} 类型为Response接口的Promise对象
@@ -27,6 +26,10 @@ async function userLogin(data: loginDto): Promise<Response> {
     return result;
   });
 }
+/**
+ * @returns {Promise<Response>} 类型为Response接口的Promise对象
+ * @description 获取当前用户的菜单列表
+ */
 async function getMenu(): Promise<Response> {
   return await baseFetch({
     url: "/oauth/menu/router",

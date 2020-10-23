@@ -76,30 +76,6 @@ module.exports = {
           },
         ]);
     }
-    // config.module
-    //   .rule("scss")
-    //   .use("sass-loader")
-    //   .tap((options) =>
-    //     merge(options, {
-    //       includePaths: [path.resolve(__dirname, "node_modules")],
-    //     })
-    //   );
-    // config.module
-    //   .rule("less")
-    //   .use("less-loader")
-    //   .tap((options) =>
-    //     merge(options, {
-    //       includePaths: [path.resolve(__dirname, "node_modules")],
-    //     })
-    //   );
-    // config.module
-    //   .rule("css")
-    //   .use("css-loader")
-    //   .tap((options) =>
-    //     merge(options, {
-    //       includePaths: [path.resolve(__dirname, "node_modules")],
-    //     })
-    //   );
   },
   css: {
     // 是否使用css分离插件 ExtractTextPlugin
@@ -108,7 +84,7 @@ module.exports = {
     sourceMap: false,
     // css预设器配置项
     // 启用 CSS modules for all css / pre-processor files.
-    requireModuleExtension: false,
+    requireModuleExtension: true,
     loaderOptions: {
       sass: {},
       less: {

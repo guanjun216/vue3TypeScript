@@ -2,8 +2,9 @@
   <router-view />
 </template>
 
-<style lang="less">
-@import "ant-design-vue/dist/antd.less";
+<style lang="scss">
+// @import "~@/assets/custom-theme/index.css";
+// @import "~@/assets/iconfont/iconfont.css";
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

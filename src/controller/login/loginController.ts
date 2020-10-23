@@ -67,18 +67,17 @@ export default class LoginOperation {
     });
     //如果是总中心就取第一级
     if (path.indexOf("center") == -1) {
-      menuJson.push([
-        {
-          index: "/",
-          title: "首页",
-        },
-      ]);
+      menuJson.push({
+        index: "/",
+        title: "首页",
+      });
       if (eocMenu && eocMenu.length != 0) {
         eocMenu.forEach((item) => {
           if (item.path.indexOf("center") != -1) {
             let itemJson = {
               index: item.path,
               title: item.name,
+              icon: item.meta.icon,
             };
             menuJson.push(itemJson);
           }
