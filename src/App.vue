@@ -3,8 +3,7 @@
 </template>
 
 <style lang="scss">
-// @import "~@/assets/custom-theme/index.css";
-// @import "~@/assets/iconfont/iconfont.css";
+@import "~@/assets/styles/index.scss";
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

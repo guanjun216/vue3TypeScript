@@ -1,7 +1,7 @@
 import { instance as baseFetch } from "@/api/base/baseFetch";
 import { getCookie } from "@/utils/auth";
 import loginDto from "@/model/DTO/login/login";
-import { Response } from "@/model/interface/common";
+import { Response } from "@/model/types/interface/common";
 
 /**
  * @param {loginDto} 登录DTO对象

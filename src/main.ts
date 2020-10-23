@@ -2,7 +2,7 @@ import ant from "@/utils/antd";
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
-import store from "./store";
+import store from "./model/store";
 import Scrollbar from "@/components/common/element/scrollbar/index.js";
 import "ant-design-vue/dist/antd.css";
 import "@/assets/custom-theme/index.css";

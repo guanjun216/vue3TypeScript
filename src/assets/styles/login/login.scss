@@ -13,6 +13,12 @@
         margin-bottom: 19px;
       }
     }
+    ::v-deep .ant-form-item-children{
+      padding: 15px 0px;
+    }
+    ::v-deep .ant-form-explain{
+      text-align: left;
+    }
     /*-- 将输入框有关的一些重复样式定义在这里 --*/
     @mixin activeCss() {
       color: #333333;

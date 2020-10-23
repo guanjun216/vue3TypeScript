@@ -2,7 +2,7 @@ import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import Login from "@/views/loginView/index.vue";
 import { getCookie } from "@/utils/auth";
 import Layout from "../components/layout/index.vue";
-import { CookiesInfo } from "@/model/Enum/common";
+import { CookiesInfo } from "@/model/types/Enum/common";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/login",

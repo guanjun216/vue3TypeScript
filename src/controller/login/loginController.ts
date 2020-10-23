@@ -1,11 +1,11 @@
 import { SetCookie } from "@/utils/auth";
 import loginDto from "@/model/DTO/login/login";
-import { CookiesInfo } from "@/model/Enum/common";
+import { CookiesInfo } from "@/model/types/Enum/common";
 import { userLogin as loginApi, getMenu } from "@/api/baseCenter/login/login";
-import { UserInfo } from "@/model/interface/login/login";
+import { UserInfo } from "@/model/types/interface/login/login";
 import { App, reactive } from "vue";
 import { notification } from "ant-design-vue";
-import { Response } from "@/model/interface/common";
+import { Response } from "@/model/types/interface/common";
 
 export default class LoginOperation {
   private _app: App | undefined;

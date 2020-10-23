@@ -27,6 +27,7 @@ module.exports = {
   lintOnSave: false,
   configureWebpack: {
     // Webpack配置
+    name: "今天买买",
     devtool: "none", // webpack内关闭sourceMap
     optimization: {
       // 优化配置

@@ -4,7 +4,7 @@ const title = "今天买买全球EOC";
  * @type {boolean} true | false
  * @description Whether show the settings right-panel
  */
-export const showSettings = false;
+const showSettings = false;
 
 /**
  * @type {boolean} true | false
@@ -31,4 +31,4 @@ const sidebarLogo = false;
  * If you want to also use it in dev, you can pass ['production', 'development']
  */
 const errorLog = "production";
-export default { showSettings, tagsView, fixedHeader, sidebarLogo };
+export default { title, showSettings, tagsView, fixedHeader, sidebarLogo };
