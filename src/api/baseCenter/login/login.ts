@@ -1,14 +1,14 @@
 import { instance as baseFetch } from "@/api/base/baseFetch";
 import { getCookie } from "@/utils/auth";
-import loginDto from "@/model/DTO/login/login";
 import { Response } from "@/model/types/interface/common";
+import { UserInfo } from "@/model/types/interface/login/login";
 
 /**
- * @param {loginDto} 登录DTO对象
+ * @param {UserInfo} 登录DTO对象
  * @returns {Promise<Response>} 类型为Response接口的Promise对象
  * @description 用户登录请求，请求Token数据并保存到cookies
  */
-async function userLogin(data: loginDto): Promise<Response> {
+async function userLogin(data: UserInfo): Promise<Response> {
   return await baseFetch({
     url: "/oauth/anno/token",
     method: "post",

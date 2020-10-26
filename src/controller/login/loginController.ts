@@ -1,13 +1,64 @@
 import { SetCookie } from "@/utils/auth";
-import loginDto from "@/model/DTO/login/login";
 import { CookiesInfo } from "@/model/types/Enum/common";
 import { userLogin as loginApi, getMenu } from "@/api/baseCenter/login/login";
 import { UserInfo } from "@/model/types/interface/login/login";
 import { App, reactive } from "vue";
 import { notification } from "ant-design-vue";
 import { Response } from "@/model/types/interface/common";
-
+import {
+  validateUsername,
+  validatePassword,
+  validateNewPassword,
+} from "@/utils/validate.ts";
 export default class LoginOperation {
+  public static loginFormRules = reactive({
+    account: [
+      {
+        required: true,
+        message: "请输入账号",
+        trigger: "blur",
+      },
+      {
+        validator: validateUsername,
+        trigger: "blur",
+      },
+    ],
+    password: [
+      {
+        required: true,
+        message: "请输入密码",
+        trigger: "blur",
+      },
+      {
+        validator: validatePassword,
+        trigger: "blur",
+      },
+    ],
+    code: [
+      {
+        required: true,
+        message: "请输入验证码",
+        trigger: "blur",
+      },
+      {
+        min: 1,
+        max: 20,
+        message: "长度在 1 到 20 个字符",
+        trigger: "blur",
+      },
+    ],
+    newPassword: [
+      {
+        required: true,
+        message: "请输入密码",
+        trigger: "blur",
+      },
+      {
+        validator: validateNewPassword,
+        trigger: "blur",
+      },
+    ],
+  });
   private _app: App | undefined;
   private static _instance: LoginOperation;
   constructor(app: App | undefined) {
@@ -28,12 +79,7 @@ export default class LoginOperation {
    * @description 用户登录请求，请求Token数据并保存到cookies
    */
   public async userLogin(data: UserInfo): Promise<Response> {
-    let ld: loginDto = new loginDto();
-    ld.account = data.username;
-    ld.password = data.password;
-    ld.key = data.key;
-    ld.code = data.validateCode;
-    return await loginApi(ld).then((res: Response) => {
+    return await loginApi(data).then((res: Response) => {
       if (res.code === "0") {
         SetCookie(
           process.env.VUE_APP_MODE + CookiesInfo.TOKEN_NAME,
@@ -65,48 +111,13 @@ export default class LoginOperation {
         });
       }
     });
-    //如果是总中心就取第一级
-    if (path.indexOf("center") == -1) {
-      menuJson.push({
-        index: "/",
-        title: "首页",
-      });
-      if (eocMenu && eocMenu.length != 0) {
-        eocMenu.forEach((item) => {
-          if (item.path.indexOf("center") != -1) {
-            let itemJson = {
-              index: item.path,
-              title: item.name,
-              icon: item.meta.icon,
-            };
-            menuJson.push(itemJson);
-          }
-        });
-      }
-    } else {
-      if (eocMenu && eocMenu.length != 0) {
-        //寻找当前中心
-        let center = "";
-        path.indexOf("marketing_center") != -1 && (center = "marketing_center");
-        path.indexOf("supplier_center") != -1 && (center = "supplier_center");
-        path.indexOf("order_center") != -1 && (center = "order_center");
-        path.indexOf("user_center") != -1 && (center = "user_center");
-        path.indexOf("pay_center") != -1 && (center = "pay_center");
-        path.indexOf("help_center") != -1 && (center = "help_center");
-        path.indexOf("review_center") != -1 && (center = "review_center");
-        path.indexOf("settle_center") != -1 && (center = "settle_center");
-        path.indexOf("message_center") != -1 && (center = "message_center");
-
-        //选出正确的中心
-        let trueCenterData: any[] = [];
-        eocMenu.forEach((item) => {
-          if (item.path.indexOf(center) != -1) {
-            //选出这个中心
-            trueCenterData = item.children ? item.children : [];
-          }
-        });
-
-        trueCenterData.forEach((item) => {
+    menuJson.push({
+      index: "/",
+      title: "首页",
+    });
+    if (eocMenu && eocMenu.length != 0) {
+      eocMenu.forEach((item) => {
+        if (item.path.indexOf("center") != -1) {
           let itemJson: any = {};
           //如果是一级目录
           if (!item.children || item.children.length <= 0) {
@@ -120,35 +131,35 @@ export default class LoginOperation {
               title: item.name,
               subs: [],
             };
-            item.children.forEach(
-              (child: { children: any[]; path: any; name: any }) => {
-                let childJson: any = {};
-                // 判断是否有children
-                if (!child.children || child.children.length <= 0) {
-                  childJson = {
-                    index: child.path,
-                    title: child.name,
-                  };
-                } else {
-                  childJson = {
-                    index: Math.random().toString(),
-                    title: child.name,
-                    subs: [],
-                  };
-                  child.children.forEach((child2: { path: any; name: any }) => {
-                    childJson.subs.push({
-                      index: child2.path,
-                      title: child2.name,
-                    });
-                  });
+            function menuForEach(list: any[]) {
+              let result: any[] = [];
+              list.forEach(
+                (child: { children: any[]; path: any; name: any }) => {
+                  let childJson: any = {};
+                  // 判断是否有children
+                  if (!child.children || child.children.length <= 0) {
+                    childJson = {
+                      index: child.path,
+                      title: child.name,
+                    };
+                  } else {
+                    childJson = {
+                      index: Math.random().toString(),
+                      title: child.name,
+                      subs: [],
+                    };
+                    childJson.subs = menuForEach(child.children);
+                  }
+                  result.push(childJson);
                 }
-                itemJson.subs.push(childJson);
-              }
-            );
+              );
+              return result;
+            }
+            itemJson.subs = menuForEach(item.children);
           }
           menuJson.push(itemJson);
-        });
-      }
+        }
+      });
     }
     return menuJson;
   }

@@ -13,8 +13,8 @@
   </a-breadcrumb>
 </template>
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
-import pathToRegexp from "path-to-regexp";
+import { defineComponent, reactive, watch } from "vue";
+import { compile } from "path-to-regexp";
 import { createRouter, RouteLocationMatched, useRoute } from "vue-router";
 export default defineComponent({
   name: "Breadcrumb",
@@ -31,6 +31,12 @@ export default defineComponent({
         "Dashboard".toLocaleLowerCase()
       );
     };
+    watch(route, (oldValue, newValue) => {
+      if (newValue.path.startsWith("/redirect/")) {
+        return;
+      }
+      getBreadcrumb();
+    });
     const getBreadcrumb = () => {
       // only show routes with meta.title
       let matched = route.matched.filter(
@@ -41,7 +47,7 @@ export default defineComponent({
       if (!isDashboard(first)) {
         //   let item:RouteLocationMatched = route;
         matched = (([
-          { path: "/dashboard", meta: { title: "首页" } },
+          { path: "/home", meta: { title: "首页" } },
         ] as unknown) as RouteLocationMatched[]).concat(matched);
       }
 
@@ -54,6 +60,7 @@ export default defineComponent({
           return item;
         }) as unknown) as never[];
     };
+    getBreadcrumb();
     return {
       levelList,
     };
@@ -61,7 +68,7 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
-.app-breadcrumb.a-breadcrumb {
+.ant-breadcrumb {
   display: inline-block;
   font-size: 14px;
   line-height: 50px;

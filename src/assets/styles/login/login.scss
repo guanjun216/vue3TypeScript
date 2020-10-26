@@ -5,7 +5,7 @@
     background-size: 100% 100%;
     background-attachment: fixed;
   
-    ::v-deep .login-form-item {
+    ::v-deep(.login-form-item) {
       margin-top: 20px;
       margin-bottom: 29px;
   
@@ -13,10 +13,10 @@
         margin-bottom: 19px;
       }
     }
-    ::v-deep .ant-form-item-children{
+    ::v-deep(.ant-form-item-children){
       padding: 15px 0px;
     }
-    ::v-deep .ant-form-explain{
+    ::v-deep(.ant-form-explain){
       text-align: left;
     }
     /*-- 将输入框有关的一些重复样式定义在这里 --*/
@@ -28,7 +28,7 @@
       background: url("~@/assets/img/" + $bgImg) 10px center no-repeat;
     }
     /*-- 使用mixin --*/
-    ::v-deep .ant-input {
+    ::v-deep(.ant-input) {
       width: 100%;
       height: 46px;
       background-color: rgba(255, 255, 255, 1);
@@ -40,32 +40,32 @@
         @include activeCss();
       }
     }
-    ::v-deep .active .ant-input {
+    .active ::v-deep(.ant-input) {
       @include activeCss();
     }
-    ::v-deep .login-username .ant-input {
+    .login-username ::v-deep(.ant-input) {
       @include setBgImg("loginUsername.png");
     }
-    ::v-deep .login-password .ant-input {
+    .login-password ::v-deep(.ant-input) {
       @include setBgImg("loginPassword.png");
     }
-    ::v-deep .login-validate-code .ant-input {
+    .login-validate-code ::v-deep(.ant-input) {
       @include setBgImg("loginValidateCode.png");
     }
     /*-- 图标高亮 --*/
-    ::v-deep .login-username:hover .ant-input,
-    ::v-deep .login-username.active .ant-input {
+    .login-username:hover ::v-deep(.ant-input),
+    .login-username.active ::v-deep(.ant-input) {
       @include setBgImg("loginUsernameActive.png");
     }
-    ::v-deep .login-password:hover .ant-input,
-    ::v-deep .login-password.active .ant-input {
+    .login-password:hover ::v-deep(.ant-input),
+    .login-password.active ::v-deep(.ant-input) {
       @include setBgImg("loginPasswordActive.png");
     }
-    ::v-deep .login-validate-code:hover .ant-input,
-    ::v-deep .login-validate-code.active .ant-input {
+    .login-validate-code:hover ::v-deep(.ant-input),
+    .login-validate-code.active ::v-deep(.ant-input) {
       @include setBgImg("loginValidateCodeActive.png");
     }
-    ::v-deep .login-btn {
+    ::v-deep(.login-btn) {
       width: 100%;
       height: 46px;
       margin-top: 11px;

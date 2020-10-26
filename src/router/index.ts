@@ -5,6 +5,16 @@ import Layout from "../components/layout/index.vue";
 import { CookiesInfo } from "@/model/types/Enum/common";
 const routes: Array<RouteRecordRaw> = [
   {
+    path: "/redirect",
+    component: Layout,
+    children: [
+      {
+        path: "/redirect/:path(.*)",
+        component: () => import("@/views/redirect/index"),
+      },
+    ],
+  },
+  {
     path: "/login",
     name: "Login",
     component: Login,
@@ -25,6 +35,14 @@ const routes: Array<RouteRecordRaw> = [
         },
       },
     ],
+  },
+  {
+    path: "/404",
+    component: () => import("@/views/errorPage/404"),
+  },
+  {
+    path: "/:catchAll(.*)",
+    redirect: "/404",
   },
 ];
 

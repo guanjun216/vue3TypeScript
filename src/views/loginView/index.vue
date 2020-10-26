@@ -18,12 +18,12 @@
               :inline-message="false"
               class="login-form"
             >
-              <a-form-item class="login-form-item" name="username">
+              <a-form-item class="login-form-item" name="account">
                 <a-input
                   :class="`login-username ${
-                    login.username.length >= 6 ? 'active' : ''
+                    login.account.length >= 6 ? 'active' : ''
                   }`"
-                  v-model:value="login.username"
+                  v-model:value="login.account"
                   placeholder="请输入登录账户"
                   :maxlength="16"
                 ></a-input>
@@ -39,12 +39,12 @@
                   :maxlength="16"
                 ></a-input>
               </a-form-item>
-              <a-form-item class="login-form-item" name="validateCode">
+              <a-form-item class="login-form-item" name="code">
                 <a-input
                   :class="`login-validate-code ${
-                    login.validateCode.length > 0 ? 'active' : ''
+                    login.code.length > 0 ? 'active' : ''
                   }`"
-                  v-model:value="login.validateCode"
+                  v-model:value="login.code"
                   placeholder="请输入验证码"
                   @keyup.enter="updateUser"
                 ></a-input>
@@ -61,9 +61,7 @@
                   @click="updateUser"
                   class="login-btn"
                   :disabled="
-                    !login.username ||
-                    login.password.length < 6 ||
-                    !login.validateCode
+                    !login.account || login.password.length < 6 || !login.code
                   "
                   :loading="saveLoading"
                   >登录</a-button
@@ -96,14 +94,10 @@ import {
   onMounted,
 } from "vue";
 import { useForm } from "@ant-design-vue/use";
-import { UserInfo } from "@/model/interface/login/login";
-import { Response } from "@/model/interface/common";
+import { UserInfo } from "@/model/types/interface/login/login";
+import { Response } from "@/model/types/interface/common";
 import LoginController from "@/controller/login/loginController";
-import {
-  validateUsername,
-  validatePassword,
-  validateNewPassword,
-} from "@/utils/validate.ts";
+
 import { useRouter } from "vue-router";
 export default defineComponent({
   name: "Login",
@@ -111,74 +105,26 @@ export default defineComponent({
   setup() {
     const instance = getCurrentInstance();
     let key: string = ""; //随机值
-    const login = reactive({
-      username: "",
-      password: "",
-      validateCode: "",
-      setLDiv: "",
-      screenWidth: "",
-      screenHeight: "",
+    const login: UserInfo = reactive({
+      code: "",
       key: "",
+      password: "",
+      account: "",
+      tenant: "MDAwMA==",
+      grantType: "captcha",
     }) as UserInfo;
     const captchaImage = ref("");
     const version = ref("1.0.0");
-    const rules = reactive({
-      username: [
-        {
-          required: true,
-          message: "请输入账号",
-          trigger: "blur",
-        },
-        {
-          validator: validateUsername,
-          trigger: "blur",
-        },
-      ],
-      password: [
-        {
-          required: true,
-          message: "请输入密码",
-          trigger: "blur",
-        },
-        {
-          validator: validatePassword,
-          trigger: "blur",
-        },
-      ],
-      validateCode: [
-        {
-          required: true,
-          message: "请输入验证码",
-          trigger: "blur",
-        },
-        {
-          min: 1,
-          max: 20,
-          message: "长度在 1 到 20 个字符",
-          trigger: "blur",
-        },
-      ],
-      newPassword: [
-        {
-          required: true,
-          message: "请输入密码",
-          trigger: "blur",
-        },
-        {
-          validator: validateNewPassword,
-          trigger: "blur",
-        },
-      ],
-    });
+    const rules = LoginController.loginFormRules;
     const { resetFields, validate, validateInfos } = useForm(login, rules);
     const saveLoading = ref(false); // 登录按钮loading
     const resetPwdVisible = ref(false); // 修改密码，默认不可见
     const captchaImageChange = () => {
-      key = Math.random().toString();
+      login.key = Math.random().toString();
       captchaImage.value =
         process.env.VUE_APP_BASE_URL +
         "/oauth/anno/captcha?tenant=MDAwMA==&key=" +
-        key;
+        login.key;
     };
     onMounted(() => {
       captchaImageChange();
@@ -191,7 +137,6 @@ export default defineComponent({
     const updateUser = () => {
       validate().then((res) => {
         saveLoading.value = true;
-        login.key = key;
         LoginController.getInstance(instance?.appContext.app)
           .userLogin(login)
           .then((res) => {

@@ -3,29 +3,7 @@
     <div class="sidebar-top">
       <img src="@/assets/img/logoHorizontal.png" alt="logo" width="120" />
     </div>
-    <div class="aside" v-if="isBaseMenu">
-      <a-menu
-        class="el-menu-vertical"
-        :default-active="defaultActive"
-        :unique-opened="true"
-        :collapse="isCollapse"
-        :background-color="variables.menuBg"
-        :text-color="variables.menuText"
-        :active-text-color="variables.menuActiveText"
-        :collapse-transition="false"
-        mode="vertical"
-      >
-        <template v-for="item in items" :key="item.index">
-          <a-menu-item :index="item.index" @click="goThis(item.index)">
-            <!-- <a href="javascript:void(0)" @click=""> -->
-            <i :class="item.icon"></i>
-            <span>{{ item.title }}</span>
-            <!-- </a> -->
-          </a-menu-item>
-        </template>
-      </a-menu>
-    </div>
-    <div class="aside" v-else>
+    <div class="aside">
       <a-menu
         class="el-menu-vertical"
         :default-active="defaultActive"
@@ -36,51 +14,72 @@
         :active-text-color="variables.menuActiveText"
         router
         :collapse-transition="false"
-        mode="vertical"
+        mode="inline"
       >
-        <a-menu-item key="back">
-          <a href="javascript:void(0)" @click="goThis('/')">
-            <span>返回</span>
-          </a>
-        </a-menu-item>
-        <template v-for="item in items">
-          <template v-if="item.subs">
-            <a-sub-menu :index="item.index" :key="item.index">
-              <template v-slot:title>
-                <i :class="item.icon" v-show="iconFlag"></i>
-                <span>{{ item.title }}</span>
-              </template>
-              <template>
-                <template v-for="(subItem, index) in item.subs">
+        <template v-for="item in items" :key="item.index">
+          <a-sub-menu v-if="item.subs && item.subs.length" :key="item.index">
+            <template v-slot:title>
+              <i :class="item.icon" v-show="iconFlag"></i>
+              <span>{{ item.title }}</span>
+            </template>
+            <template v-for="sub1 in item.subs" :key="sub1.index">
+              <a-sub-menu
+                v-if="sub1.subs && sub1.subs.length"
+                :key="sub1.index"
+              >
+                <template v-slot:title>
+                  <i :class="sub1.icon" v-show="iconFlag"></i>
+                  <span>{{ sub1.title }}</span>
+                </template>
+                <template v-for="sub2 in sub1.subs" :key="sub2.index">
                   <a-sub-menu
-                    v-if="subItem.subs"
-                    :index="subItem.title"
-                    :key="index"
+                    v-if="sub2.subs && sub2.subs.length"
+                    :key="sub2.index"
                   >
                     <template v-slot:title>
-                      <i :class="subItem.icon"></i>
-                      <span>{{ subItem.title }}</span>
+                      <i :class="sub2.icon" v-show="iconFlag"></i>
+                      <span>{{ sub2.title }}</span>
                     </template>
-                    <!--三级菜单-->
                     <a-menu-item
-                      v-for="(threeItem, i) in subItem.subs"
-                      :key="i"
-                      :index="threeItem.index"
-                      >{{ threeItem.title }}</a-menu-item
+                      v-for="sub3 in sub2.subs"
+                      :index="sub3.index"
+                      :key="sub3.index"
+                      @click="goThis(sub3.index)"
                     >
+                      <i :class="sub3.icon"></i>
+                      <span>{{ sub3.title }}</span>
+                    </a-menu-item>
                   </a-sub-menu>
-                  <a-menu-item
-                    v-else
-                    :index="subItem.index"
-                    :key="subItem.index"
-                    >{{ subItem.title }}</a-menu-item
-                  >
+                  <template v-else>
+                    <a-menu-item
+                      :index="sub2.index"
+                      :key="sub2.index"
+                      @click="goThis(sub2.index)"
+                    >
+                      <i :class="sub2.icon"></i>
+                      <span>{{ sub2.title }}</span>
+                    </a-menu-item>
+                  </template>
                 </template>
+              </a-sub-menu>
+              <template v-else>
+                <a-menu-item
+                  :index="sub1.index"
+                  :key="sub1.index"
+                  @click="goThis(sub1.index)"
+                >
+                  <i :class="sub1.icon"></i>
+                  <span>{{ sub1.title }}</span>
+                </a-menu-item>
               </template>
-            </a-sub-menu>
-          </template>
+            </template>
+          </a-sub-menu>
           <template v-else>
-            <a-menu-item :index="item.index" :key="item.index">
+            <a-menu-item
+              :index="item.index"
+              :key="item.index"
+              @click="goThis(item.index)"
+            >
               <i :class="item.icon"></i>
               <span>{{ item.title }}</span>
             </a-menu-item>
@@ -101,7 +100,7 @@ import {
 } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import variables from "@/assets/styles/variables.scss";
-import { User } from "@/model/interface/common";
+import { User } from "@/model/types/interface/common";
 import { IsPC } from "@/utils/index";
 import { getCookie } from "@/utils/auth";
 import LoginOperation from "@/controller/login/loginController";
@@ -134,12 +133,11 @@ export default defineComponent({
     LoginOperation.getInstance(instance?.appContext.app)
       .getMenuList(route.path)
       .then((res) => {
-        // items = items.concat(res);
         res.map((item) => {
           items.push(item);
         });
+        console.log(items);
       });
-    console.log(items);
     onMounted(() => {});
 
     isBaseMenu.value = route.path.indexOf("center") == -1 ? true : false;
@@ -175,7 +173,22 @@ export default defineComponent({
 </script>
 <style scoped lang="scss">
 @import "@/assets/styles/variables.scss";
-
+.el-menu-vertical {
+  color: #bfcbd9 !important;
+}
+.ant-menu-inline {
+  border-right: none;
+}
+.ant-menu-submenu ::v-deep(.ant-menu) {
+  background-color: #1f2d3d !important;
+  color: #bfcbd9 !important;
+}
+::v-deep(.ant-menu-item-group-title) {
+  color: #bfcbd9 !important;
+}
+// ::v-deep(.ant-menu-submenu-title) {
+//   background-color: #202736;
+// }
 .aside-wrapper {
   height: 100%;
 
@@ -191,10 +204,32 @@ export default defineComponent({
     height: calc(100vh - 73px);
     overflow-x: auto;
     color: #fff;
+    overflow-x: hidden;
+    &::-webkit-scrollbar {
+      //整体样式
+      height: 5px;
+      width: 5px;
+      background: #202736;
+    }
+    &::-webkit-scrollbar-thumb {
+      //滑动滑块条样式
+      // width: 5px;
+      // height: 5px;
+      border-radius: 3px;
+      background: #202736;
+    }
+    &::-webkit-scrollbar-track {
+      //轨道的样式
+      // width: 5px;
+      // height: 5px;
+      border-radius: 3px;
+      background: #909399;
+    }
+
     .ant-menu-root {
       background-color: #202736;
       .ant-menu-item {
-        color: #fff;
+        color: #bfcbd9 !important;
         font-size: 14px;
         a {
           color: #fff;
@@ -202,6 +237,9 @@ export default defineComponent({
             color: #1890ff;
           }
         }
+      }
+      .ant-menu-item-selected {
+        background-color: #909399 !important;
       }
     }
     .aside-top {

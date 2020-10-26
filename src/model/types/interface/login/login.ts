@@ -1,13 +1,4 @@
 interface UserInfo {
-  username: string;
-  password: string;
-  validateCode: string;
-  setLDiv: string;
-  screenWidth: string;
-  screenHeight: string;
-  key:string;
-}
-interface User {
     account: string;
     password: string;
     tenant: string;
@@ -15,4 +6,4 @@ interface User {
     code: string;
     grantType: string;
 }
-export type {UserInfo,User}
+export type {UserInfo}
