@@ -6,6 +6,7 @@ import {
   Col,
   Row,
   Menu,
+  Table,
 } from "ant-design-vue";
 import { notification, message } from "ant-design-vue";
 import { App } from "vue";
@@ -18,6 +19,7 @@ export const ant = {
     app.use(Col);
     app.use(Row);
     app.use(Menu);
+    app.use(Table);
     app.config.globalProperties.$message = message;
     app.config.globalProperties.$notify = notification;
   },

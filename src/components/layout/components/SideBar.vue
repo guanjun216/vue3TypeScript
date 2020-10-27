@@ -6,8 +6,6 @@
     <div class="aside">
       <a-menu
         class="el-menu-vertical"
-        :default-active="defaultActive"
-        :unique-opened="true"
         :collapse="isCollapse"
         :background-color="variables.menuBg"
         :text-color="variables.menuText"
@@ -102,8 +100,8 @@ import { useRoute, useRouter } from "vue-router";
 import variables from "@/assets/styles/variables.scss";
 import { User } from "@/model/types/interface/common";
 import { IsPC } from "@/utils/index";
-import { getCookie } from "@/utils/auth";
-import LoginOperation from "@/controller/login/loginController";
+import { getCookie } from "@/utils/cookies";
+import LoginOperation from "@/model/controller/login/loginController";
 export default defineComponent({
   name: "Sidebar",
   props: {
@@ -131,12 +129,11 @@ export default defineComponent({
     const instance = getCurrentInstance();
     let items: any[] = reactive([]);
     LoginOperation.getInstance(instance?.appContext.app)
-      .getMenuList(route.path)
+      .getMenuList()
       .then((res) => {
         res.map((item) => {
           items.push(item);
         });
-        console.log(items);
       });
     onMounted(() => {});
 
@@ -156,8 +153,7 @@ export default defineComponent({
       return route.path && route.path != "/" ? route.path : "/dashboard";
     });
     const goThis = (path: string) => {
-      location.href = "#" + path;
-      location.reload();
+      router.push({ path: path });
     };
     return {
       user,
@@ -202,9 +198,9 @@ export default defineComponent({
 
   .aside {
     height: calc(100vh - 73px);
-    overflow-x: auto;
     color: #fff;
     overflow-x: hidden;
+    text-align: left;
     &::-webkit-scrollbar {
       //整体样式
       height: 5px;

@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 import { message } from "ant-design-vue";
-import { getCookie, SetCookie } from "@/utils/auth";
+import { getCookie, SetCookie } from "@/utils/cookies";
 
 // 创建axios 实例
 export const instance: AxiosInstance = axios.create({

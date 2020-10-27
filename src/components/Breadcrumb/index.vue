@@ -1,26 +1,26 @@
 <template>
   <a-breadcrumb class="app-breadcrumb" separator="/">
-    <!-- <transition-group name="breadcrumb"> -->
-    <a-breadcrumb-item v-for="(item, index) in levelList.list" :key="item.path">
+    <a-breadcrumb-item v-for="(item, index) in levelList.list" :key="index">
       <span
+        :key="item.path"
         v-if="item.redirect === 'noRedirect' || index == levelList.length - 1"
         class="no-redirect"
         >{{ item.meta.title }}</span
       >
       <span v-else>{{ item.meta.title }}</span>
     </a-breadcrumb-item>
-    <!-- </transition-group> -->
   </a-breadcrumb>
 </template>
 <script lang="ts">
 import { defineComponent, reactive, watch } from "vue";
 import { compile } from "path-to-regexp";
-import { createRouter, RouteLocationMatched, useRoute } from "vue-router";
+import { RouteLocationMatched, useRoute, useRouter } from "vue-router";
 export default defineComponent({
   name: "Breadcrumb",
   setup() {
-    const levelList = reactive({ list: [] });
+    let levelList = reactive({ list: [] });
     const route = useRoute();
+    const router = useRouter();
     const isDashboard = (route: RouteLocationMatched) => {
       const name = route && route.name;
       if (!name) {
@@ -31,34 +31,20 @@ export default defineComponent({
         "Dashboard".toLocaleLowerCase()
       );
     };
-    watch(route, (oldValue, newValue) => {
-      if (newValue.path.startsWith("/redirect/")) {
-        return;
+    watch(
+      () => route.path,
+      (newValue, oldValue) => {
+        if (newValue.startsWith("/redirect/")) {
+          return;
+        }
+        getBreadcrumb();
       }
-      getBreadcrumb();
-    });
+    );
     const getBreadcrumb = () => {
-      // only show routes with meta.title
-      let matched = route.matched.filter(
-        (item) => item.meta && item.meta.title
-      );
-      const first = matched[0];
-
-      if (!isDashboard(first)) {
-        //   let item:RouteLocationMatched = route;
-        matched = (([
-          { path: "/home", meta: { title: "首页" } },
-        ] as unknown) as RouteLocationMatched[]).concat(matched);
-      }
-
-      levelList.list = (matched
-        .filter(
-          (item) =>
-            item.meta && item.meta.title && item.meta.breadcrumb !== false
-        )
-        .map((item) => {
-          return item;
-        }) as unknown) as never[];
+      // levelList
+      levelList.list = (route.matched.map((item) => {
+        return item;
+      }) as unknown) as never[];
     };
     getBreadcrumb();
     return {

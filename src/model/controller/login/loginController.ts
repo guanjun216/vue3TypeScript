@@ -1,4 +1,4 @@
-import { SetCookie } from "@/utils/auth";
+import { SetCookie } from "@/utils/cookies";
 import { CookiesInfo } from "@/model/types/Enum/common";
 import { userLogin as loginApi, getMenu } from "@/api/baseCenter/login/login";
 import { UserInfo } from "@/model/types/interface/login/login";
@@ -99,7 +99,24 @@ export default class LoginOperation {
       return res;
     });
   }
-  public async getMenuList(path: string): Promise<any[]> {
+  public async getMenuList(): Promise<any[]> {
+    let eocMenu: any[] = [
+      { index: "/", title: "首页" },
+      {
+        index: "/gmv",
+        title: "GMV",
+        subs: [
+          { index: "/gmv/today", title: "当日GMV" },
+          { index: "/gmv/month", title: "当月GMV" },
+          { index: "/gmv/total", title: "累计数据" },
+          { index: "/gmv/thirty", title: "近30日" },
+        ],
+      },
+    ];
+
+    return eocMenu;
+  }
+  public async getMenuListFinal(): Promise<any[]> {
     let menuJson: any[] = reactive([]);
     let eocMenu: any[] = [];
     await getMenu().then((response) => {

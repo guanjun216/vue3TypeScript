@@ -10,9 +10,6 @@
     <breadcrumb id="breadcrumb-container" class="breadcrumb-container" />
     <div class="right-menu">
       <template v-if="device !== 'mobile'">
-        <!-- <error-log
-          class="errLog-container right-menu-item desktop hover-effect"
-        /> -->
         <router-link to="/home" class="right-menu-item desktop hover-effect"
           >欢迎，{{ name }}</router-link
         >
@@ -28,7 +25,7 @@ import { defineComponent } from "vue";
 import Breadcrumb from "@/components/breadcrumb/index.vue";
 import Hamburger from "@/components/hamburger/index";
 import { useStore } from "vuex";
-import { getCookie, SetCookie } from "@/utils/auth";
+import { getCookie, SetCookie } from "@/utils/cookies";
 import { useRoute, useRouter } from "vue-router";
 export default defineComponent({
   name: "NavBar",

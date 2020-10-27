@@ -63,10 +63,10 @@ export default defineComponent({
     const router = useRouter();
     const instance = getCurrentInstance();
 
-    // const visitedViews = computed(() => {
-    //   return store.state.tagsView.visitedViews;
-    // });
-    const { visitedViews } = store.getters;
+    const visitedViews = computed(() => {
+      return store.getters.visitedViews;
+    });
+    // const { visitedViews } = store.getters;
     const routes = computed(() => {
       return [];
     });
@@ -117,7 +117,6 @@ export default defineComponent({
       nextTick(() => {
         for (const tag of tags) {
           if (tag.to.path === route.path) {
-            // instance?.refs.scrollPane?.moveToTarget(tag);
             if (tag.to.fullPath !== route.fullPath) {
               store.dispatch("tagsView/updateVisitedView", route);
             }
@@ -162,10 +161,7 @@ export default defineComponent({
       if (latestView) {
         router.push(latestView.fullPath);
       } else {
-        // now the default is to redirect to the home page if there is no tags-view,
-        // you can adjust it according to your needs.
         if (view.name === "Dashboard") {
-          // to reload home page
           router.replace({ path: "/redirect" + view.fullPath });
         } else {
           router.push("/");
@@ -174,7 +170,6 @@ export default defineComponent({
     };
     const openMenu = (tag: any, e: any) => {
       const el: any = instance?.refs.scrollPane;
-      // instance?.appContext.config.globalProperties
 
       const menuMinWidth = 105;
       const offsetLeft = el.getBoundingClientRect().left; // container margin left
@@ -196,12 +191,21 @@ export default defineComponent({
       visible.value = false;
     };
     watch(
-      () => route,
-      (oldValue, newValue) => {}
+      () => route.path,
+      (oldValue, newValue) => {
+        addTags();
+        moveToCurrentTag();
+      }
     );
     watch(
       () => visible.value,
-      (oldValue, newValue) => {}
+      (newValue, oldValue) => {
+        if (newValue) {
+          document.body.addEventListener("click", closeMenu);
+        } else {
+          document.body.removeEventListener("click", closeMenu);
+        }
+      }
     );
     onMounted(() => {
       initTags();

@@ -96,7 +96,7 @@ import {
 import { useForm } from "@ant-design-vue/use";
 import { UserInfo } from "@/model/types/interface/login/login";
 import { Response } from "@/model/types/interface/common";
-import LoginController from "@/controller/login/loginController";
+import LoginController from "@/model/controller/login/loginController";
 
 import { useRouter } from "vue-router";
 export default defineComponent({

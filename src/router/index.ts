@@ -1,8 +1,9 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import Login from "@/views/loginView/index.vue";
-import { getCookie } from "@/utils/auth";
+import { getCookie } from "@/utils/cookies";
 import Layout from "../components/layout/index.vue";
 import { CookiesInfo } from "@/model/types/Enum/common";
+import gmv from "@/router/gmv/index";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/redirect",
@@ -40,6 +41,7 @@ const routes: Array<RouteRecordRaw> = [
     path: "/404",
     component: () => import("@/views/errorPage/404"),
   },
+  ...gmv,
   {
     path: "/:catchAll(.*)",
     redirect: "/404",

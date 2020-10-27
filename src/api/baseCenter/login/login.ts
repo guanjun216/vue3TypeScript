@@ -1,5 +1,5 @@
 import { instance as baseFetch } from "@/api/base/baseFetch";
-import { getCookie } from "@/utils/auth";
+import { getCookie } from "@/utils/cookies";
 import { Response } from "@/model/types/interface/common";
 import { UserInfo } from "@/model/types/interface/login/login";
 
