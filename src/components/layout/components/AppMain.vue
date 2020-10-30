@@ -1,6 +1,6 @@
 <template>
   <section class="app-main">
-    <router-view :key="key" v-slot="{ Component }">
+    <router-view class="router-wrapper" :key="key" v-slot="{ Component }">
       <transition name="fade-transform" mode="out-in">
         <keep-alive :include="cachedViews">
           <component :is="Component" />
@@ -34,13 +34,20 @@ export default defineComponent({
 <style lang="scss" scoped>
 .app-main {
   width: 100%;
+  height: 100%;
   position: relative;
   overflow: hidden;
+  display: flex;
+  .router-wrapper {
+    width: 100%;
+    height: 100%;
+  }
 }
 
 .hasTagsView {
   .app-main {
     min-height: calc(100vh - 127px);
+    display: flex;
   }
 }
 </style>

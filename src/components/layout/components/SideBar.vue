@@ -13,6 +13,7 @@
         router
         :collapse-transition="false"
         mode="inline"
+        theme="dark"
       >
         <template v-for="item in items" :key="item.index">
           <a-sub-menu v-if="item.subs && item.subs.length" :key="item.index">

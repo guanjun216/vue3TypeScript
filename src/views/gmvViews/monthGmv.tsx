@@ -1,6 +1,6 @@
 import { defineComponent, getCurrentInstance } from 'vue';
 import { Form } from "ant-design-vue"
-import "@/assets/styles/gmv/gmv.scss"
+// import "@/assets/styles/gmv/gmv.scss"
 export default defineComponent({
     name: "monthGMV",
     components: { Form },

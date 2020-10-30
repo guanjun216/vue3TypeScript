@@ -113,16 +113,17 @@ export default defineComponent({
       return false;
     };
     const moveToCurrentTag = () => {
-      const tags: any = instance?.refs.tag;
+      const tag: any = instance?.refs.tag || [];
+      // console.log(tags);
       nextTick(() => {
-        for (const tag of tags) {
-          if (tag.to.path === route.path) {
-            if (tag.to.fullPath !== route.fullPath) {
-              store.dispatch("tagsView/updateVisitedView", route);
-            }
-            break;
+        // for (const tag of tags) {
+        if (tag.to.path === route.path) {
+          if (tag.to.fullPath !== route.fullPath) {
+            store.dispatch("tagsView/updateVisitedView", route);
           }
+          // break;
         }
+        // }
       });
     };
     const refreshSelectedTag = (view: any) => {
@@ -238,7 +239,7 @@ export default defineComponent({
       position: relative;
       cursor: pointer;
       height: 26px;
-      line-height: 26px;
+      line-height: 20px;
       border: 1px solid #d8dce5;
       color: #495060;
       background: #fff;

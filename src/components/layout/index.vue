@@ -57,7 +57,7 @@ export default defineComponent({
   position: relative;
   height: 100%;
   width: 100%;
-
+  display: flex;
   &.mobile.openSidebar {
     position: fixed;
     top: 0;

@@ -71,8 +71,8 @@ div:focus {
   padding-left: 5px;
 }
 
-.block {
-  display: block;
+.flex {
+  display: flex;
 }
 
 .pointer {
@@ -80,13 +80,13 @@ div:focus {
 }
 
 .inlineBlock {
-  display: block;
+  display: flex;
 }
 
 .clearfix {
   &:after {
     visibility: hidden;
-    display: block;
+    display: flex;
     font-size: 0;
     content: " ";
     clear: both;
@@ -121,6 +121,7 @@ aside {
 //main-container全局样式
 .app-container {
   padding: 20px;
+  display: flex;
 }
 
 .components-container {
