@@ -73,7 +73,7 @@ module.exports = {
           {
             test: /\.js$|\.html$|\.css/, // 匹配文件名
             threshold: 10240, // 超过10k进行压缩
-            deleteOriginalAssets: true, // 是否删除源文件，这里最好不要删除
+            deleteOriginalAssets: false, // 是否删除源文件，这里最好不要删除
           },
         ]);
     }
